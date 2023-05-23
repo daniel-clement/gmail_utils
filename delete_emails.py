@@ -81,10 +81,12 @@ def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: s
     imap.logout()
 
 
-# loop through the list of sender emails you want to delete and delete each of them
-for email in tqdm(senders_emails_to_delete, desc="Deleting Sender Emails"):
+if __name__ == "__main__":
 
-    delete_emails_matching_sender(sender_email=email,
-                                  user_email=my_email,
-                                  user_pw=app_password
-                                  )
+    # loop through the list of sender emails you want to delete and delete each of them
+    for email in tqdm(senders_emails_to_delete, desc="Deleting Sender Emails"):
+
+        delete_emails_matching_sender(sender_email=email,
+                                      user_email=my_email,
+                                      user_pw=app_password
+                                      )
