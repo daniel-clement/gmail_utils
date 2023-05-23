@@ -1,8 +1,19 @@
-# this script was written by Daniel Clement - 2023
+"""
+@author: Daniel Clement
+@publication_date: May 2023
+"""
 
 # imports
+import logging
 import imaplib
+import sys
+
 from tqdm import tqdm
+
+logging.basicConfig(level=logging.INFO,
+                    stream=sys.stdout
+                    )
+
 
 # parameters
 ####################################################################################################################
@@ -17,7 +28,12 @@ def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: s
     """
     This function will search for all the emails from the sender email, move them to the trash,
     and then empty the trash.
+    :param sender_email: The email address to delete emails of
+    :param user_email: your gmail email address
+    :param user_pw: your gmail app password
+    :return: Nothing
     """
+
     # initialize IMAP object for gmail
     imap = imaplib.IMAP4_SSL("imap.gmail.com")
 
@@ -36,15 +52,15 @@ def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: s
 
     # check to see if there are any emails that meet the search criteria
     if num_messages == 0:
-        print(f"Not enough emails found to process email: {sender_email}")
+        logging.info(f"Not enough emails found to process email: {sender_email}")
         pass  # if there are no emails, skip that email address
 
     else:
-        print(f"\n{num_messages} found in search for: {sender_email}")
-        print(f"Moving emails to trash...")
+        logging.info(f"\n{num_messages} found in search for: {sender_email}")
+        logging.info(f"Moving emails to trash...")
 
+        # if it's a bytes type, decode to str
         if isinstance(messages, bytes):
-            # if it's a bytes type, decode to str
             msg_ids = messages.decode()
 
         # add a comma to separate msg entries
@@ -54,7 +70,7 @@ def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: s
         imap.store(msg_ids_comma, '+X-GM-LABELS', '\\Trash')
 
         # permanently delete all messages from trash folder
-        print("Emptying Trash...")
+        logging.info("Emptying Trash...")
         trash_folder = '[Gmail]/Trash'
         imap.select(trash_folder)
         imap.store("1:*", '+FLAGS', '\\Deleted')  # Flag all Trash as Deleted
@@ -65,10 +81,12 @@ def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: s
     imap.logout()
 
 
-# loop through the list of sender emails you want to delete and delete each of them
-for email in tqdm(emails_to_del, desc="Deleting Sender Emails"):
+if __name__ == "__main__":
 
-    delete_emails_matching_sender(sender_email=email,
-                                  user_email=my_email,
-                                  user_pw=app_password
-                                  )
+    # loop through the list of sender emails you want to delete and delete each of them
+    for email in tqdm(senders_emails_to_delete, desc="Deleting Sender Emails"):
+
+        delete_emails_matching_sender(sender_email=email,
+                                      user_email=my_email,
+                                      user_pw=app_password
+                                      )
