@@ -4,37 +4,38 @@
 """
 
 # imports
-import logging
 import imaplib
-import sys
+import logging
+# import sys
 
 from tqdm import tqdm
 
-logging.basicConfig(level=logging.INFO,
-                    stream=sys.stdout
-                    )
+#
+# logging.basicConfig(level=logging.INFO,
+#                     stream=sys.stdout,
+#                     )
 
 
 # parameters
-####################################################################################################################
-# your Gmail email address
-my_email = "your_email@gmail.com"
-
-# your Gmail app password
-app_password = "your app password here"
-
-# a list of the email addresses of the senders you want to delete
-senders_emails_to_delete = ["example1@example.com", "example2@example2.com", "example3@example3.com"]
-####################################################################################################################
+# ####################################################################################################################
+# my_email = "your_email@gmail.com"
+# app_password = "your app password here"
+#
+# senders_emails_to_delete = ["example1@example.com", "example2@example2.com", "example3@example3.com"]
+# ####################################################################################################################
 
 
-def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: str) -> None:
+def delete_emails_matching_sender(
+        sender_email: str,
+        user_email: str,
+        user_app_pw: str
+) -> None:
     """
-    This function will search for all the emails from the sender email, move them to the trash,
-    and then empty the trash.
+    This function will search for all the emails from the sender email,
+    move them to the trash, and then empty the trash.
     :param sender_email: The email address to delete emails of
     :param user_email: your gmail email address
-    :param user_pw: your gmail app password
+    :param user_app_pw: your gmail app password
     :return: Nothing
     """
 
@@ -43,7 +44,7 @@ def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: s
 
     # login to gmail with credentials
     imap.login(user=user_email,
-               password=user_pw)
+               password=user_app_pw)
 
     # select the Inbox
     imap.select("INBOX")
@@ -85,16 +86,21 @@ def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: s
     imap.logout()
 
 
-def main():
-    # loop through the list of sender emails you want to delete and delete each of them
-    for email in tqdm(senders_emails_to_delete, desc="Deleting Sender Emails"):
+def main(email_address: str, base_user_email: str, base_app_password: str) -> None:
+    """
+    Main process. loops through the list of sender emails you want to delete and delete each of them.
+    :param email_address: the list of user email addresses (user defined input)
+    :param base_user_email: the users email address (user defined input)
+    :param base_app_password: the app password (user defined input)
+    :return: None
+    """
 
-        delete_emails_matching_sender(sender_email=email,
-                                      user_email=my_email,
-                                      user_pw=app_password
-                                      )
+    # loop through the list of sender emails
+    # for email in tqdm(email_addresses, desc="Deleting Sender Emails"):
 
-
-if __name__ == "__main__":
-
-    main()
+    # run the function to delete the emails from the sender
+    delete_emails_matching_sender(
+        sender_email=email_address,
+        user_email=base_user_email,
+        user_app_pw=base_app_password
+    )
