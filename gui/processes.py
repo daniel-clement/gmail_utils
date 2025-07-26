@@ -6,23 +6,6 @@
 # imports
 import imaplib
 import logging
-# import sys
-
-from tqdm import tqdm
-
-#
-# logging.basicConfig(level=logging.INFO,
-#                     stream=sys.stdout,
-#                     )
-
-
-# parameters
-# ####################################################################################################################
-# my_email = "your_email@gmail.com"
-# app_password = "your app password here"
-#
-# senders_emails_to_delete = ["example1@example.com", "example2@example2.com", "example3@example3.com"]
-# ####################################################################################################################
 
 
 def delete_emails_matching_sender(
@@ -80,6 +63,8 @@ def delete_emails_matching_sender(
         imap.select(trash_folder)
         imap.store("1:*", '+FLAGS', '\\Deleted')  # Flag all Trash as Deleted
         imap.expunge()
+
+        logging.info(f"All emails deleted for: {sender_email}")
 
     # close and then logout from the mailbox server
     imap.close()

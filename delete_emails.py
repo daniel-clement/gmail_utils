@@ -1,6 +1,8 @@
 """
-@author: Daniel Clement
-@publication_date: May 2023
+Author: Daniel Clement
+Publication_date: May 2023
+
+This script will delete all emails from any of the input senders emails.
 """
 
 # imports
@@ -87,7 +89,7 @@ def delete_emails_matching_sender(sender_email: str, user_email: str, user_pw: s
 
 def main():
     # loop through the list of sender emails you want to delete and delete each of them
-    for email in tqdm(senders_emails_to_delete, desc="Deleting Sender Emails"):
+    for email in tqdm(emails_to_del, desc="Deleting Sender Emails"):
 
         delete_emails_matching_sender(sender_email=email,
                                       user_email=my_email,
